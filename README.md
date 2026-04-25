@@ -75,25 +75,28 @@ flowchart LR
 
 
 
+### Class Diagram (Architecture Overview)
+```mermaid
 classDiagram
     %% Interfaces
     class IRepository {
-        <<interface>>
         +getById(id)
         +getAll()
         +save(entity)
         +update(entity)
     }
+    <<interface>> IRepository
 
     %% Models
     class Staff {
-        <<abstract>>
         #int id
         #string name
         #string username
         #string password
-        +getRole()* string
+        +getRole() string
     }
+    <<abstract>> Staff
+
     class Manager
     class Salesman
     class Surveyor
@@ -121,7 +124,7 @@ classDiagram
     
     class AuthService {
         -IStaffRepository staffRepo
-        +login() Staff*
+        +login() Staff
     }
 
     %% Repositories
