@@ -33,9 +33,8 @@ The codebase is optimized for static analysis tools (like SonarQube or CCCC). Fe
 
 ## Diagrams
 
-### Diagrams
+### Use Case Diagram
 
-#### Use Case Diagram
 ```mermaid
 flowchart LR
     Manager([Manager])
@@ -66,52 +65,60 @@ flowchart LR
     Manager --> UC6
     Manager --> UC7
     Manager --> UC8
-    
+
     UC6 -.-> UC5
+```
 
-   classDiagram
-    %% Classes and Members
-    class IRepository
-    IRepository : +getById(id)
-    IRepository : +getAll()
-    IRepository : +save(entity)
-    IRepository : +update(entity)
+### Class Diagram
 
-    class Staff
-    Staff : #int id
-    Staff : #string name
-    Staff : #string username
-    Staff : #string password
-    Staff : +getRole() string
+```mermaid
+classDiagram
+    class IRepository {
+        +getById(id)
+        +getAll()
+        +save(entity)
+        +update(entity)
+    }
+
+    class Staff {
+        #int id
+        #string name
+        #string username
+        #string password
+        +getRole() string
+    }
 
     class Manager
     class Salesman
     class Surveyor
 
-    class Claim
-    Claim : -int claimId
-    Claim : -int policyNo
-    Claim : -string status
-    Claim : -int workshopId
-    Claim : +serialize() string
+    class Claim {
+        -int claimId
+        -int policyNo
+        -string status
+        -int workshopId
+        +serialize() string
+    }
 
-    class ClaimService
-    ClaimService : -IClaimRepository claimRepo
-    ClaimService : -IWorkshopRepository shopRepo
-    ClaimService : +fileClaim()
-    ClaimService : +approveClaim()
-    ClaimService : +rejectClaim()
-    
-    class AuthService
-    AuthService : -IStaffRepository staffRepo
-    AuthService : +login() Staff
+    class ClaimService {
+        -IClaimRepository claimRepo
+        -IWorkshopRepository shopRepo
+        +fileClaim()
+        +approveClaim()
+        +rejectClaim()
+    }
 
-    class FileClaimRepository
-    FileClaimRepository : -string filename
-    FileClaimRepository : +save(Claim) int
-    FileClaimRepository : +parse(stringstream) Claim
+    class AuthService {
+        -IStaffRepository staffRepo
+        +login() Staff
+    }
 
-    %% Relationships
+    class FileClaimRepository {
+        -string filename
+        +save(Claim) int
+        +parse(stringstream) Claim
+    }
+
     Staff <|-- Manager
     Staff <|-- Salesman
     Staff <|-- Surveyor
@@ -119,4 +126,4 @@ flowchart LR
     ClaimService --> IRepository
     AuthService --> Staff
     FileClaimRepository --> Claim
-    FileClaimRepository --> Claim
+```
