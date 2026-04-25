@@ -33,8 +33,6 @@ The codebase is optimized for static analysis tools (like SonarQube or CCCC). Fe
 
 ## Diagrams
 
-### Use Case Diagram
-```mermaid
 flowchart LR
     %% Actors
     M([Manager])
@@ -53,7 +51,7 @@ flowchart LR
         UC8(View Claim History)
     end
 
-    %% Relationships
+    %% Actor Relationships
     S --> UC1
     M --> UC1
     V --> UC1
@@ -68,16 +66,14 @@ flowchart LR
     M --> UC7
     M --> UC8
     
-    UC6 -. <<includes>> .-> UC5
+    %% Use Case Relationships
+    UC6 -.->|includes| UC5
 
 
 
 
 
-
-### Class Diagram (Architecture Overview)
-```mermaid
-classDiagram
+    classDiagram
     %% Interfaces
     class IRepository {
         +getById(id)
@@ -85,7 +81,6 @@ classDiagram
         +save(entity)
         +update(entity)
     }
-    <<interface>> IRepository
 
     %% Models
     class Staff {
@@ -95,7 +90,6 @@ classDiagram
         #string password
         +getRole() string
     }
-    <<abstract>> Staff
 
     class Manager
     class Salesman
