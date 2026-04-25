@@ -33,48 +33,43 @@ The codebase is optimized for static analysis tools (like SonarQube or CCCC). Fe
 
 ## Diagrams
 
-flowchart LR
-    %% Actors
-    M([Manager])
-    S([Salesman])
-    V([Surveyor])
+### Diagrams
 
-    %% System Boundary
-    subgraph Insurance System
-        UC1(Login to System)
-        UC2(Register Customer & Vehicle)
+#### Use Case Diagram
+```mermaid
+flowchart LR
+    Manager([Manager])
+    Salesman([Salesman])
+    Surveyor([Surveyor])
+
+    subgraph System [Automobile Insurance System]
+        UC1(Login)
+        UC2(Register Customer)
         UC3(Record Policy)
-        UC4(File a Claim)
-        UC5(Submit Inspection Report)
-        UC6(Approve / Reject Claim)
-        UC7(View Pending Claims)
-        UC8(View Claim History)
+        UC4(File Claim)
+        UC5(Submit Report)
+        UC6(Process Claim)
+        UC7(View Pending)
+        UC8(View History)
     end
 
-    %% Actor Relationships
-    S --> UC1
-    M --> UC1
-    V --> UC1
+    Salesman --> UC1
+    Manager --> UC1
+    Surveyor --> UC1
 
-    S --> UC2
-    S --> UC3
-    S --> UC4
+    Salesman --> UC2
+    Salesman --> UC3
+    Salesman --> UC4
 
-    V --> UC5
+    Surveyor --> UC5
 
-    M --> UC6
-    M --> UC7
-    M --> UC8
+    Manager --> UC6
+    Manager --> UC7
+    Manager --> UC8
     
-    %% Use Case Relationships
-    UC6 -.->|includes| UC5
-
-
-
-
+    UC6 -.-> UC5
 
     classDiagram
-    %% Interfaces
     class IRepository {
         +getById(id)
         +getAll()
@@ -82,7 +77,6 @@ flowchart LR
         +update(entity)
     }
 
-    %% Models
     class Staff {
         #int id
         #string name
@@ -107,7 +101,6 @@ flowchart LR
         +serialize() string
     }
 
-    %% Services
     class ClaimService {
         -IClaimRepository claimRepo
         -IWorkshopRepository shopRepo
@@ -121,15 +114,13 @@ flowchart LR
         +login() Staff
     }
 
-    %% Repositories
     class FileClaimRepository {
         -string filename
         +save(Claim) int
         +parse(stringstream) Claim
     }
 
-    %% Associations
     IRepository <|-- FileClaimRepository
-    ClaimService --> IRepository : Dependency Injection
-    AuthService --> Staff : Creates / Returns
-    FileClaimRepository --> Claim : Manages
+    ClaimService --> IRepository
+    AuthService --> Staff
+    FileClaimRepository --> Claim
