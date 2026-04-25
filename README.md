@@ -69,3 +69,70 @@ flowchart LR
     M --> UC8
     
     UC6 -. <<includes>> .-> UC5
+
+
+
+
+
+
+classDiagram
+    %% Interfaces
+    class IRepository {
+        <<interface>>
+        +getById(id)
+        +getAll()
+        +save(entity)
+        +update(entity)
+    }
+
+    %% Models
+    class Staff {
+        <<abstract>>
+        #int id
+        #string name
+        #string username
+        #string password
+        +getRole()* string
+    }
+    class Manager
+    class Salesman
+    class Surveyor
+
+    Staff <|-- Manager
+    Staff <|-- Salesman
+    Staff <|-- Surveyor
+
+    class Claim {
+        -int claimId
+        -int policyNo
+        -string status
+        -int workshopId
+        +serialize() string
+    }
+
+    %% Services
+    class ClaimService {
+        -IClaimRepository claimRepo
+        -IWorkshopRepository shopRepo
+        +fileClaim()
+        +approveClaim()
+        +rejectClaim()
+    }
+    
+    class AuthService {
+        -IStaffRepository staffRepo
+        +login() Staff*
+    }
+
+    %% Repositories
+    class FileClaimRepository {
+        -string filename
+        +save(Claim) int
+        +parse(stringstream) Claim
+    }
+
+    %% Associations
+    IRepository <|-- FileClaimRepository
+    ClaimService --> IRepository : Dependency Injection
+    AuthService --> Staff : Creates / Returns
+    FileClaimRepository --> Claim : Manages
