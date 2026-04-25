@@ -33,8 +33,6 @@ The codebase is optimized for static analysis tools (like SonarQube or CCCC). Fe
 
 ## Diagrams
 
-### Use Case Diagram
-
 ```mermaid
 flowchart LR
     Manager([Manager])
@@ -43,13 +41,14 @@ flowchart LR
 
     subgraph System [Automobile Insurance System]
         UC1(Login)
-        UC2(Register Customer)
-        UC3(Record Policy)
-        UC4(File Claim)
-        UC5(Submit Report)
-        UC6(Process Claim)
-        UC7(View Pending)
-        UC8(View History)
+        UC2(Register Customer & Vehicle)
+        UC3(Record Insurance Policy)
+        UC4(File a Claim with Workshop)
+        UC5(Submit Inspection Report)
+        UC6(Examine Report & Approve/Reject Claim)
+        UC7(Generate New Customers Report)
+        UC8(View Pending Claims Report)
+        UC9(View Customer Claim History)
     end
 
     Salesman --> UC1
@@ -65,21 +64,13 @@ flowchart LR
     Manager --> UC6
     Manager --> UC7
     Manager --> UC8
-
-    UC6 -.-> UC5
+    Manager --> UC9
 ```
-
 ### Class Diagram
 
 ```mermaid
 classDiagram
-    class IRepository {
-        +getById(id)
-        +getAll()
-        +save(entity)
-        +update(entity)
-    }
-
+    %% Staff Inheritance
     class Staff {
         #int id
         #string name
@@ -87,43 +78,70 @@ classDiagram
         #string password
         +getRole() string
     }
-
     class Manager
     class Salesman
     class Surveyor
 
+    %% Core Entities
+    class Customer {
+        +int id
+        +string name
+        +string contact
+        +string registrationDate
+    }
+    class Vehicle {
+        +string regNumber
+        +string make
+        +int customerId
+    }
+    class InsurancePolicy {
+        +int policyNo
+        +string vehicleReg
+        +double premium
+    }
     class Claim {
-        -int claimId
-        -int policyNo
-        -string status
-        -int workshopId
-        +serialize() string
+        +int claimId
+        +int policyNo
+        +string status
+        +int workshopId
+    }
+    class InspectionReport {
+        +int reportId
+        +int claimId
+        +int surveyorId
+        +double estimatedCost
+    }
+    class Workshop {
+        +int id
+        +string name
+        +string location
     }
 
+    %% Business Layer (Services)
     class ClaimService {
-        -IClaimRepository claimRepo
-        -IWorkshopRepository shopRepo
         +fileClaim()
         +approveClaim()
         +rejectClaim()
     }
-
-    class AuthService {
-        -IStaffRepository staffRepo
-        +login() Staff
+    class ReportService {
+        +getNewCustomersInMonth()
+        +getPendingClaims()
+        +getClaimHistory()
+        +getInspectionReport()
     }
 
-    class FileClaimRepository {
-        -string filename
-        +save(Claim) int
-        +parse(stringstream) Claim
-    }
-
+    %% Relationships
     Staff <|-- Manager
     Staff <|-- Salesman
     Staff <|-- Surveyor
-    IRepository <|-- FileClaimRepository
-    ClaimService --> IRepository
-    AuthService --> Staff
-    FileClaimRepository --> Claim
+
+    Customer "1" *-- "*" Vehicle : owns
+    Vehicle "1" *-- "1" InsurancePolicy : covered by
+    InsurancePolicy "1" *-- "*" Claim : has
+    Claim "1" --> "1" Workshop : repaired at
+    Claim "1" <-- "1" InspectionReport : inspected by
+
+    ClaimService --> Claim
+    ReportService --> Claim
+    ReportService --> Customer
 ```
