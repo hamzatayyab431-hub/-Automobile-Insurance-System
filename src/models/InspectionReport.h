@@ -1,6 +1,5 @@
 #pragma once
 #include <string>
-#include <stdexcept>
 
 class InspectionReport {
 private:
@@ -11,15 +10,18 @@ private:
     std::string description;
     double estimatedCost;
 
+    std::string escape(std::string str) const {
+        for (char& c : str) if (c == ',') c = ';';
+        return str;
+    }
+
 public:
     InspectionReport() : reportId(0), claimId(0), surveyorId(0), estimatedCost(0.0) {}
 
     InspectionReport(int rId, int cId, int sId, const std::string& d,
                      const std::string& desc, double cost)
         : reportId(rId), claimId(cId), surveyorId(sId),
-          date(d), description(desc) {
-        setEstimatedCost(cost);
-    }
+          date(d), description(desc), estimatedCost(cost) {}
           
     // Getters
     int getReportId() const { return reportId; }
@@ -35,16 +37,7 @@ public:
     void setSurveyorId(int val) { surveyorId = val; }
     void setDate(const std::string& val) { date = val; }
     void setDescription(const std::string& val) { description = val; }
-    
-    void setEstimatedCost(double val) { 
-        if (val < 0) throw std::runtime_error("Estimated cost cannot be negative.");
-        estimatedCost = val; 
-    }
-
-    std::string escape(std::string str) const {
-        for (char& c : str) if (c == ',') c = ';';
-        return str;
-    }
+    void setEstimatedCost(double val) { estimatedCost = val; }
 
     std::string serialize() const {
         return std::to_string(reportId) + "," + 

@@ -9,6 +9,11 @@ private:
     int year;
     int customerId;
 
+    std::string escape(std::string str) const {
+        for (char& c : str) if (c == ',') c = ';';
+        return str;
+    }
+
 public:
     Vehicle() : year(0), customerId(0) {}
 
@@ -30,11 +35,6 @@ public:
     void setModel(const std::string& val) { model = val; }
     void setYear(int val) { year = val; }
     void setCustomerId(int val) { customerId = val; }
-
-    std::string escape(std::string str) const {
-        for (char& c : str) if (c == ',') c = ';';
-        return str;
-    }
 
     std::string serialize() const {
         return escape(regNumber) + "," + 

@@ -30,8 +30,12 @@ public:
                 std::cout << "Enter month (e.g., '04' or 'Jan'): ";
                 if (!(std::cin >> month)) break;
                 auto list = reportService.getNewCustomersInMonth(0, month);
-                for (const auto& c : list) {
-                    std::cout << c.getId() << " - " << c.getName() << " (" << c.getRegistrationDate() << ")\n";
+                if (list.empty()) {
+                    std::cout << "No customers found for month: " << month << "\n";
+                } else {
+                    for (const auto& c : list) {
+                        std::cout << c.getId() << " - " << c.getName() << " (" << c.getRegistrationDate() << ")\n";
+                    }
                 }
             } 
             else if (choice == 2) {
