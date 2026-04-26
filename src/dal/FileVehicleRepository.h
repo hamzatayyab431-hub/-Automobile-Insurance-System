@@ -45,7 +45,7 @@ public:
 
     void update(const Vehicle& entity) override {
         auto all = getAll();
-        auto it = std::find_if(all.begin(), all.end(), [&regNo=entity.getRegNumber()](const Vehicle& v){ return v.getRegNumber() == regNo; });
+        auto it = std::find_if(all.begin(), all.end(), [regNo=entity.getRegNumber()](const Vehicle& v){ return v.getRegNumber() == regNo; });
         if (it != all.end()) {
             *it = entity;
             CsvHelper::writeAll(filename, all);
