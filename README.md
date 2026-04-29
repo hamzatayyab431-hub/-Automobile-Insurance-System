@@ -143,5 +143,5 @@ classDiagram
 
     ClaimService --> Claim
     ReportService --> Claim
-    ReportService --> Customerr
+    ReportService --> Customer
 ```
