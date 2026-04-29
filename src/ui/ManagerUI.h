@@ -23,11 +23,11 @@ public:
             std::cout << "4. View Customer Claim History\n";
             std::cout << "5. Logout\n";
             std::cout << "Choice: ";
-            if (!(std::cin >> choice)) break; // Defensive generic failure check
+            if (!(std::cin >> choice)) break; 
 
             if (choice == 1) {
                 std::string month;
-                std::cout << "Enter month (e.g., '04' or 'Jan'): ";
+                std::cout << "Enter month (e.g., '04'): ";
                 if (!(std::cin >> month)) break;
                 auto list = reportService.getNewCustomersInMonth(0, month);
                 if (list.empty()) {

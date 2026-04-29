@@ -1,4 +1,5 @@
 #include <iostream>
+#include <filesystem>
 
 #include "dal/FileCustomerRepository.h"
 #include "dal/FileVehicleRepository.h"
@@ -15,6 +16,17 @@
 #include "ui/SurveyorUI.h"
 
 int main() {
+    // Auto-detect project root so "data/" paths resolve correctly
+    // regardless of whether the program is run from root or src/
+    if (!std::filesystem::exists("data")) {
+        if (std::filesystem::exists("../data")) {
+            std::filesystem::current_path(std::filesystem::current_path().parent_path());
+        } else {
+            // data/ not found anywhere — create it in current directory
+            std::filesystem::create_directory("data");
+        }
+    }
+
     // 1. Data Access Layer
     FileCustomerRepository custRepo;
     FileVehicleRepository vehRepo;

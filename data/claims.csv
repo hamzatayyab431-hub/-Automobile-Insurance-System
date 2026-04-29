@@ -1,2 +1,5 @@
-1,1,2026-04-20,Front bumper scratch,Approved,good,1
-2,2,2026-04-22,Rear end collision,Pending,,0
+1,1,2026-04-20,Front bumper scratch,Approved,bad,1
+2,2,2026-04-22,Rear end collision,Pending,,2
+3,3,2026-04-25,Windshield cracked by debris,Inspected,,1
+4,4,2026-04-26,Side mirror broken in parking,Pending,,3
+5,1,2026-04-27,Engine overheating after accident,Pending,,2
